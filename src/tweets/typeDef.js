@@ -32,14 +32,6 @@ const typeDef = gql`
   extend type Mutation {
     createTweet(tweet: TweetInput!): Tweet
   }
-
-  type Subscription {
-    tweetCreated: TweetCreated!
-  }
-
-  type TweetCreated {
-    tweet: Tweet!
-  }
 `
 
 export default typeDef

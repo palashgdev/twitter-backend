@@ -1,6 +1,7 @@
 import User from './user'
 import { AuthenticationError, UserInputError } from 'apollo-server'
 import { createAccessToken } from '../auth'
+import pubsub, { EVENTS } from '../subscription'
 
 const resolvers = {
   Query: {
@@ -31,10 +32,19 @@ const resolvers = {
         maxAge: 30 * 60 * 1000,
       })
 
+      pubsub.publish(EVENTS.USER.LOGGED_IN, {
+        userLoggedIn: { user },
+      })
+
       return user
     },
     logout: async (_, {}, { res }) => {
       res.clearCookie('accessToken')
+
+      pubsub.publish(EVENTS.USER.LOGGED_OUT, {
+        userLoggedOut: true,
+      })
+
       return true
     },
   },
